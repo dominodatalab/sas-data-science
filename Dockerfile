@@ -6,7 +6,7 @@ ARG DOMINO_USER_GROUP=domino
 
 # These can be modified
 ARG DOMINO_USER_PASSWORD=domino
-ARG SASDS_SCRIPT_DIR="/var/opt/workspaces/sasds"
+ENV SASDS_SCRIPT_DIR="/var/opt/workspaces/sasds"
 
 ENTRYPOINT []
  
@@ -25,8 +25,11 @@ ADD run_sas.sh /usr/bin/run_sas.sh
 ADD start.sh $SASDS_SCRIPT_DIR/start
 
 # Add files to support the reverse proxy server
+ADD reverse_proxy/proxy.sh $SASDS_SCRIPT_DIR/proxy
 ADD reverse_proxy/start.html $SASDS_SCRIPT_DIR/html/SASStudio/
 ADD reverse_proxy/nginx.conf $SASDS_SCRIPT_DIR/
+RUN chmod a+x $SASDS_SCRIPT_DIR/proxy && \
+	bash $SASDS_SCRIPT_DIR/proxy
 
-RUN chown -r $DOMINO_USER_NAME:$DOMINO_GROUP_NAME $SASDS_SCRIPT_DIR && \
+RUN chown -R $DOMINO_USER_NAME:$DOMINO_GROUP_NAME $SASDS_SCRIPT_DIR && \
     chmod a+x $SASDS_SCRIPT_DIR/start /usr/bin/run_sas.sh

@@ -30,7 +30,7 @@ sudo sed -iE "s#Listen 80#Listen $APACHE_PORT#g" $APACHE_CONF
  
 # Define how we will launch SAS Viya
 export SAS_LOGS_TO_DISK=true
-function start_viya { sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint &' root; until $(curl --output /dev/null --silent --head --fail http://localhost:7080/SASStudio); do sleep 3; done; sudo /usr/sbin/nginx -c /var/opt/workspaces/sasds/nginx.conf; echo -e '\n\nStarted reverse proxy server...\n\n'; while true; do :; done; }
+function start_viya { sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint &' root; until $(curl --output /dev/null --silent --head --fail http://localhost:7080/SASStudio); do sleep 3; done; sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf; echo -e '\n\nStarted reverse proxy server...\n\n'; while true; do :; done; }
  
 # Set up Domino project to preserve SAS configuration files
 mkdir -p "$DOMINO_SAS_CONFIG_DIR" "$DOMINO_SAS_SNIPPETS_DIR" "$DOMINO_SAS_TASKS_DIR" "$DOMINO_SAS_PREFERENCES_DIR" "$DOMINO_SAS_KEYBOARDSHORTCUTS_DIR" "$DOMINO_SAS_STATE_DIR"
@@ -106,15 +106,6 @@ sas.studio.globalShortcutsPath=${SAS_SHORTCUTS_FILE}
 """
 sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
-# Reverse proxy configuration
-if [[ -z $REVERSE_PROXY_PORT ]]; then
-    REVERSE_PROXY_PORT=8888
-fi
- 
-# Reverse Proxy Server
-yum install nginx -y
-sed -iE "s#8888#$REVERSE_PROXY_PORT#g" /var/opt/workspaces/sasds/nginx.conf
-sed -iE "s#function start_viya .*#function start_viya { sudo SAS_LOGS_TO_DISK=\$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint \&' root; until \$(curl --output /dev/null --silent --head --fail http://localhost:7080/SASStudio); do sleep 3; done; sudo /usr/sbin/nginx -c /var/opt/workspaces/sasds/nginx.conf; echo -e '\\\n\\\nStarted reverse proxy server...\\\n\\\n'; while true; do :; done; }#g" /var/opt/workspaces/sasds/start
 
 # This actually starts the SAS Studio workspace
 start_viya
