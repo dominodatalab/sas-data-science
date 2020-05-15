@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -o nounset -o errexit -o pipefail
  
 ## Domino specific set up for centos:7 image

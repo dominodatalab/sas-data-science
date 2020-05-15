@@ -1,5 +1,5 @@
-#!/bin/bash
-#set -o nounset -o errexit -o pipefail
+#!/usr/bin/env bash
+set -o errexit -o pipefail
  
 DOMINO_SAS_CONFIG_DIR="${DOMINO_WORKING_DIR}/sasconfig"
 DOMINO_SASSTUDIO_AUTOEXEC_FILE="${DOMINO_SAS_CONFIG_DIR}/sasstudio-autoexec.sas"
