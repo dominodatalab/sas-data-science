@@ -11,10 +11,18 @@ ARG SASDS_SCRIPT_DIR="/var/opt/workspaces/sasds"
 ENTRYPOINT []
  
 USER root
- 
-RUN mkdir $SASDS_SCRIPT_DIR
+
+# Add scripts to configuration and launch SAS Studio workspaces
 ADD install.sh start.sh $SASDS_SCRIPT_DIR/
+
+# Add script to help launch SAS batch scripts (used by Domino Jobs)
 ADD run_sas.sh /usr/bin/run_sas.sh
-RUN chmod a+x /usr/bin/run_sas.sh
-    chmod a+x $SASDS_SCRIPT_DIR/start && \
+
+# Add files to support the reverse proxy server
+ADD start.html $SASDS_SCRIPT_DIR/html/SASStudio/
+ADD nginx.conf $SASDS_SCRIPT_DIR/
+
+RUN chown -r $DOMINO_USER_NAME:$DOMINO_GROUP_NAME $SASDS_SCRIPT_DIR
+    chmod a+x /usr/bin/run_sas.sh
+    chmod a+x $SASDS_SCRIPT_DIR/install $SASDS_SCRIPT_DIR/start && \
     bash $SASDS_SCRIPT_DIR/install
