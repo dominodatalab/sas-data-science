@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SAS Data Science</title>
+        <style type="text/css">
+            body {
+               margin: 0;
+               overflow: hidden;
+            }
+            #workspace-content {
+                position: absolute;
+                left: 0px;
+                width: 100%;
+                top: 0px;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <iframe id="workspace-content" src="about:blank" frameborder="0"></iframe>
+        <script type="text/javascript">
+            var iframe = document.getElementById("workspace-content");
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open(
+                "GET",
+                '/SASStudio',
+                true
+            );
+
+            xhr.onreadystatechange = function() {
+                var content = "<html><body><p>SAS Data Science failed to load</p></body></html>"
+
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    content = this.response;
+                }
+
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(content);
+                iframe.contentWindow.document.close();
+            };
+
+            xhr.send();
+        </script>
+    </body>
+</html>

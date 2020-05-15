@@ -19,8 +19,8 @@ ADD install.sh start.sh $SASDS_SCRIPT_DIR/
 ADD run_sas.sh /usr/bin/run_sas.sh
 
 # Add files to support the reverse proxy server
-ADD start.html $SASDS_SCRIPT_DIR/html/SASStudio/
-ADD nginx.conf $SASDS_SCRIPT_DIR/
+ADD reverse_proxy/start.html $SASDS_SCRIPT_DIR/html/SASStudio/
+ADD reverse_proxy/nginx.conf $SASDS_SCRIPT_DIR/
 
 RUN chown -r $DOMINO_USER_NAME:$DOMINO_GROUP_NAME $SASDS_SCRIPT_DIR
     chmod a+x /usr/bin/run_sas.sh
