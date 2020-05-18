@@ -12,6 +12,7 @@ USER root
 
 # Add scripts to configure SAS Data Science for Domino
 ADD install.sh $SASDS_SCRIPT_DIR/install
+ADD jupyter/install.sh /var/opt/workspaces/jupyter/install
 
 RUN chmod a+x $SASDS_SCRIPT_DIR/install && \
     bash $SASDS_SCRIPT_DIR/install

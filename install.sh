@@ -27,7 +27,6 @@ rm -rf "/usr/bin/pip"
 ln -s `which pip3` "/usr/bin/pip"
  
 # Install Jupyter
-ADD jupyter/install.sh /var/opt/workspaces/jupyter/install
 bash /var/opt/workspaces/jupyter/install
 pip3 install jupyter-server-proxy
 mkdir -p /var/opt/workspaces/jupyter
