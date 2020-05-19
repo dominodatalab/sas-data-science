@@ -103,6 +103,13 @@ sas.studio.basicPassword=domino
 sas.studio.fileNavigationRoot=CUSTOM
 sas.studio.fileNavigationCustomRootPath=${DOMINO_WORKING_DIR}
 sas.studio.globalShortcutsPath=${SAS_SHORTCUTS_FILE}
+
+sas.commons.web.security.cors.allowedOrigins=*
+sas.commons.web.security.csrf.enable-csrf=false
+sas.commons.web.security.content-security-policy-enabled=false
+sas.commons.web.security.x-frame-options-enabled=false
+sas.commons.web.security.x-content-type-options-enabled=false
+sas.commons.web.security.x-xss-protection-enabled=false
 """
 sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
