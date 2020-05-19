@@ -31,7 +31,7 @@ bash /var/opt/workspaces/jupyter/install
 pip3 install jupyter-server-proxy
 mkdir -p /var/opt/workspaces/jupyter
 curl -s https://raw.githubusercontent.com/dominodatalab/workspace-configs/develop/jupyter/start-centos -o /var/opt/workspaces/jupyter/start
-chmod +x /var/opt/workspaces/jupyter/start
+chmod a+rx /var/opt/workspaces/jupyter/start
  
 # Clean up
 unalias -a
@@ -47,7 +47,7 @@ SAS_AUTHINFO_FILE="/home/${DOMINO_USER_NAME}/.authinfo"
 ## Configure for Domino
 # Setup SAS binaries for easy access
 ln -s /opt/sas/spre/home/SASFoundation/bin/sas_en /usr/bin/sas
-chmod a+x /usr/bin/sas
+chmod a+rx /usr/bin/sas
  
 # Create a .authinfo file for SAS CAS Engine batch scripts to run locally
 echo """host localhost port 5570 user $DOMINO_USER_NAME password $DOMINO_USER_PASSWORD
