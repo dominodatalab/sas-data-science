@@ -14,7 +14,7 @@ USER root
 ADD install.sh $SASDS_SCRIPT_DIR/install
 ADD jupyter/install.sh /var/opt/workspaces/jupyter/install
 
-RUN chmod a+rx $SASDS_SCRIPT_DIR/install && \
+RUN chmod a+rx $SASDS_SCRIPT_DIR/install /var/opt/workspaces/jupyter/install && \
     bash $SASDS_SCRIPT_DIR/install
 
 # Add script to help launch SAS batch scripts (used by Domino Jobs)
