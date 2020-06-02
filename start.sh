@@ -21,6 +21,7 @@ SAS_TASKS_DIR="$HOME/.sasstudio5/myTasks"
 SAS_PREFERENCES_DIR="$HOME/.sasstudio5/preferences"
 SAS_KEYBOARDSHORTCUTS_DIR="$HOME/.sasstudio5/keyboardShortcuts"
 SAS_STATE_DIR="$HOME/.sasstudio5/state"
+SAS_JAVA_OPTIONS=""
 
 [[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
 [[ -z $REVERSE_PROXY_PORT ]] && REVERSE_PROXY_PORT=8888
@@ -128,7 +129,7 @@ sas.commons.web.security.x-xss-protection-enabled=false
     sudo sh -c "echo '$SAS_SUBDOMAIN_CONFIG_UPDATES' >> $SAS_STUDIO_CONFIG_FILE"
 else
     PREFIX="/${DOMINO_PROJECT_OWNER}/${DOMINO_PROJECT_NAME}/notebookSession/${DOMINO_RUN_ID}/"
-    SAS_JAVA_OPTIONS="-Dserver.servlet.context-path=$PREFIX"
+    SAS_JAVA_OPTIONS="$SAS_JAVA_OPTIONS -Dserver.servlet.context-path=$PREFIX"
 fi
 SAS_TEST_URL="http://localhost:7080${PREFIX}"
 DOMINO_SAS_ENTRY_PAGE="${PREFIX}start.html"
