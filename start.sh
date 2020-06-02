@@ -131,15 +131,15 @@ sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS=$SAS_JAVA_OPTIONS su --session-command '/opt/sas/viya/home/bin/entrypoint &' root
 
 # Wait for SAS Studio web server to come online
-until $(curl --output /dev/null --silent --head --fail $SAS_TEST_URL); do sleep 3; done
+#until $(curl --output /dev/null --silent --head --fail $SAS_TEST_URL); do sleep 3; done
 
 # Start reverse proxy server
-sudo mkdir -p ${SASDS_SCRIPT_DIR}/html${PREFIX}
-sudo chown -R $DOMINO_USER_NAME:$DOMINO_USER_NAME ${SASDS_SCRIPT_DIR}/html${PREFIX}
-sudo sed -Ei "s#8888#$REVERSE_PROXY_PORT#g" ${SASDS_SCRIPT_DIR}/nginx.conf
-sudo sed -E "s#SESSION_PATH#$PREFIX#g" ${SASDS_SCRIPT_DIR}/start.html > ${SASDS_SCRIPT_DIR}/html${DOMINO_SAS_ENTRY_PAGE}
-sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf
-echo -e "\n\nSAS Studio is now running\nTo get started, please visit ${DOMINO_USER_HOST}${DOMINO_SAS_ENTRY_PAGE} in your web browser.\n\n"
+#sudo mkdir -p ${SASDS_SCRIPT_DIR}/html${PREFIX}
+#sudo chown -R $DOMINO_USER_NAME:$DOMINO_USER_NAME ${SASDS_SCRIPT_DIR}/html${PREFIX}
+#sudo sed -Ei "s#8888#$REVERSE_PROXY_PORT#g" ${SASDS_SCRIPT_DIR}/nginx.conf
+#sudo sed -E "s#SESSION_PATH#$PREFIX#g" ${SASDS_SCRIPT_DIR}/start.html > ${SASDS_SCRIPT_DIR}/html${DOMINO_SAS_ENTRY_PAGE}
+#sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf
+#echo -e "\n\nSAS Studio is now running\nTo get started, please visit ${DOMINO_USER_HOST}${DOMINO_SAS_ENTRY_PAGE} in your web browser.\n\n"
 
 # Infinite loop
 while true; do :; done;
