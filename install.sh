@@ -14,7 +14,7 @@ echo 'alias python="/usr/bin/python3"' >> /home/${DOMINO_USER_NAME}/.bashrc
 echo 'alias pip="/usr/bin/pip3"' >> /home/${DOMINO_USER_NAME}/.bashrc
  
 # Install some common utilities
-yum install epel-release shadow-utils.x86_64 wget curl which git unzip gzip sudo -y
+yum install epel-release shadow-utils.x86_64 wget curl which git unzip gzip nginx sudo -y
  
 # Temporary working directory for packages
 mkdir $WORKING_TMP_DIR

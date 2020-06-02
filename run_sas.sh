@@ -27,7 +27,7 @@ then
         # Fix an error message where this file does not exist
         sudo touch /opt/sas/viya/config/etc/cas/default/startup.lua
         # Fix set -x in cas_create_dir.sh
-        sudo sed -iE 's#set [-+]x##g' /opt/sas/viya/home/SASFoundation/utilities/bin/cas_create_dir.sh
+        sudo sed -Ei 's#set [-+]x##g' /opt/sas/viya/home/SASFoundation/utilities/bin/cas_create_dir.sh
  
         # Make sure we minimize output to stdout
         sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null

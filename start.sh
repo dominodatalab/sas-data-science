@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
- 
+
+SAS_VIYA_START_SCRIPT="${SASDS_SCRIPT_DIR}/start_viya.sh" 
 DOMINO_SAS_CONFIG_DIR="${DOMINO_WORKING_DIR}/sasconfig"
 DOMINO_SASSTUDIO_AUTOEXEC_FILE="${DOMINO_SAS_CONFIG_DIR}/sasstudio-autoexec.sas"
 DOMINO_SAS_SNIPPETS_DIR="${DOMINO_SAS_CONFIG_DIR}/snippets"
@@ -20,17 +21,29 @@ SAS_TASKS_DIR="$HOME/.sasstudio5/myTasks"
 SAS_PREFERENCES_DIR="$HOME/.sasstudio5/preferences"
 SAS_KEYBOARDSHORTCUTS_DIR="$HOME/.sasstudio5/keyboardShortcuts"
 SAS_STATE_DIR="$HOME/.sasstudio5/state"
- 
+
 [[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
+[[ -z $REVERSE_PROXY_PORT ]] && REVERSE_PROXY_PORT=8888
+[[ -z $DOMINO_USER_NAME ]] && DOMINO_USER_NAME="domino"
+[[ -z $DOMINO_WORKING_DIR ]] && DOMINO_WORKING_DIR="/mnt"
+[[ -z $DOMINO_PROJECT_OWNER ]] && DOMINO_PROJECT_OWNER="domino"
+[[ -z $DOMINO_PROJECT_NAME ]] && DOMINO_PROJECT_NAME="domino"
+[[ -z $DOMINO_RUN_ID ]] && DOMINO_RUN_ID="1"
+[[ -z $DOMINO_USER_HOST ]] && DOMINO_USER_HOST="http://localhost"
+
+PREFIX="/${DOMINO_PROJECT_OWNER}/${DOMINO_PROJECT_NAME}/notebookSession/${DOMINO_RUN_ID}/"
+SAS_JAVA_OPTIONS="-Dserver.servlet.context-path=$PREFIX"
+SAS_TEST_URL="http://localhost:7080${PREFIX}"
+DOMINO_SAS_ENTRY_PAGE="${PREFIX}start.html"
  
 # Prevent SAS Entrypoint script from starting Apache proxy server
 APACHE_CONF=/etc/httpd/conf/httpd.conf
 APACHE_PORT=8880
-sudo sed -iE "s#Listen 80#Listen $APACHE_PORT#g" $APACHE_CONF
+sudo sed -Ei "s#Listen 80#Listen $APACHE_PORT#g" $APACHE_CONF
  
 # Define how we will launch SAS Viya
 export SAS_LOGS_TO_DISK=true
-function start_viya { sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint &' root; until $(curl --output /dev/null --silent --head --fail http://localhost:7080/SASStudio); do sleep 3; done; sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf; echo -e '\n\nStarted reverse proxy server...\n\n'; while true; do :; done; }
+function start_viya { sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="-Dserver.servlet.context-path=$PREFIX" su --session-command '/opt/sas/viya/home/bin/entrypoint &' root; until $(curl --output /dev/null --silent --head --fail http://localhost:7080${PREFIX}); do sleep 3; done; sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf; echo -e '\n\nStarted reverse proxy server...\n\n'; while true; do :; done; }
  
 # Set up Domino project to preserve SAS configuration files
 mkdir -p "$DOMINO_SAS_CONFIG_DIR" "$DOMINO_SAS_SNIPPETS_DIR" "$DOMINO_SAS_TASKS_DIR" "$DOMINO_SAS_PREFERENCES_DIR" "$DOMINO_SAS_KEYBOARDSHORTCUTS_DIR" "$DOMINO_SAS_STATE_DIR"
@@ -115,4 +128,18 @@ sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
 
 # This actually starts the SAS Studio workspace
-start_viya
+sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS=$SAS_JAVA_OPTIONS su --session-command '/opt/sas/viya/home/bin/entrypoint &' root
+
+# Wait for SAS Studio web server to come online
+until $(curl --output /dev/null --silent --head --fail $SAS_TEST_URL); do sleep 3; done
+
+# Start reverse proxy server
+sudo mkdir -p ${SASDS_SCRIPT_DIR}/html${PREFIX}
+sudo chown -R $DOMINO_USER_NAME:$DOMINO_USER_NAME ${SASDS_SCRIPT_DIR}/html${PREFIX}
+sudo sed -Ei "s#8888#$REVERSE_PROXY_PORT#g" ${SASDS_SCRIPT_DIR}/nginx.conf
+sudo sed -E "s#SESSION_PATH#$PREFIX#g" ${SASDS_SCRIPT_DIR}/start.html > ${SASDS_SCRIPT_DIR}/html${DOMINO_SAS_ENTRY_PAGE}
+sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf
+echo -e "\n\nSAS Studio is now running\nTo get started, please visit ${DOMINO_USER_HOST}${DOMINO_SAS_ENTRY_PAGE} in your web browser.\n\n"
+
+# Infinite loop
+while true; do :; done;
