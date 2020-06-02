@@ -109,15 +109,7 @@ sas.studio.basicPassword=domino
 sas.studio.fileNavigationRoot=CUSTOM
 sas.studio.fileNavigationCustomRootPath=${DOMINO_WORKING_DIR}
 sas.studio.globalShortcutsPath=${SAS_SHORTCUTS_FILE}
-"""
-sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
-# Some configuration for Domino subdomains and revese proxy server
-if $DOMINO_USE_SUBDOMAIN; then
-    sudo sed -Ei "s/#ADDITIONAL_CONFIG/proxy_hide_header X-Frame-Options;/g" ${SASDS_SCRIPT_DIR}/nginx.conf
-    PREFIX="/SASStudio/"    
-
-    SAS_SUBDOMAIN_CONFIG_UPDATES="""
 sas.commons.web.security.cors.allowedOrigins=*
 sas.commons.web.security.csrf.enable-csrf=false
 sas.commons.web.security.content-security-policy-enabled=false
@@ -125,8 +117,12 @@ sas.commons.web.security.x-frame-options-enabled=false
 sas.commons.web.security.x-content-type-options-enabled=false
 sas.commons.web.security.x-xss-protection-enabled=false
 """
+sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
-    sudo sh -c "echo '$SAS_SUBDOMAIN_CONFIG_UPDATES' >> $SAS_STUDIO_CONFIG_FILE"
+# Some configuration for Domino subdomains and revese proxy server
+if $DOMINO_USE_SUBDOMAIN; then
+    sudo sed -Ei "s/#ADDITIONAL_CONFIG/proxy_hide_header X-Frame-Options;/g" ${SASDS_SCRIPT_DIR}/nginx.conf
+    PREFIX="/SASStudio/"    
 else
     PREFIX="/${DOMINO_PROJECT_OWNER}/${DOMINO_PROJECT_NAME}/notebookSession/${DOMINO_RUN_ID}/"
     SAS_JAVA_OPTIONS="$SAS_JAVA_OPTIONS -Dserver.servlet.context-path=$PREFIX"
