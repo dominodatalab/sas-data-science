@@ -121,7 +121,6 @@ sudo sh -c "echo '$SAS_CONFIG_UPDATES' > $SAS_STUDIO_CONFIG_FILE"
 
 # Some configuration for Domino subdomains and revese proxy server
 if $DOMINO_USE_SUBDOMAIN; then
-    sudo sed -Ei "s/#ADDITIONAL_CONFIG/proxy_hide_header X-Frame-Options;/g" ${SASDS_SCRIPT_DIR}/nginx.conf
     PREFIX="/SASStudio/"    
 else
     PREFIX="/${DOMINO_PROJECT_OWNER}/${DOMINO_PROJECT_NAME}/notebookSession/${DOMINO_RUN_ID}/"
