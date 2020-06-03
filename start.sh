@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
 
+[[ -z $DOMINO_USER_NAME ]] && DOMINO_USER_NAME="domino"
+[[ -z $DOMINO_WORKING_DIR ]] && DOMINO_WORKING_DIR="/mnt"
+[[ -z $DOMINO_PROJECT_OWNER ]] && DOMINO_PROJECT_OWNER="domino"
+[[ -z $DOMINO_PROJECT_NAME ]] && DOMINO_PROJECT_NAME="domino"
+[[ -z $DOMINO_RUN_ID ]] && DOMINO_RUN_ID="1"
+[[ -z $DOMINO_USER_HOST ]] && DOMINO_USER_HOST="http://localhost"
+[[ -z $DOMINO_USE_SUBDOMAIN ]] && DOMINO_USE_SUBDOMAIN=false
+[[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
+[[ -z $REVERSE_PROXY_PORT ]] && REVERSE_PROXY_PORT=8888
+
 SAS_VIYA_START_SCRIPT="${SASDS_SCRIPT_DIR}/start_viya.sh" 
 DOMINO_SAS_CONFIG_DIR="${DOMINO_WORKING_DIR}/sasconfig"
 DOMINO_SASSTUDIO_AUTOEXEC_FILE="${DOMINO_SAS_CONFIG_DIR}/sasstudio-autoexec.sas"
@@ -22,16 +32,6 @@ SAS_PREFERENCES_DIR="$HOME/.sasstudio5/preferences"
 SAS_KEYBOARDSHORTCUTS_DIR="$HOME/.sasstudio5/keyboardShortcuts"
 SAS_STATE_DIR="$HOME/.sasstudio5/state"
 SAS_JAVA_OPTIONS=""
-
-[[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
-[[ -z $REVERSE_PROXY_PORT ]] && REVERSE_PROXY_PORT=8888
-[[ -z $DOMINO_USER_NAME ]] && DOMINO_USER_NAME="domino"
-[[ -z $DOMINO_WORKING_DIR ]] && DOMINO_WORKING_DIR="/mnt"
-[[ -z $DOMINO_PROJECT_OWNER ]] && DOMINO_PROJECT_OWNER="domino"
-[[ -z $DOMINO_PROJECT_NAME ]] && DOMINO_PROJECT_NAME="domino"
-[[ -z $DOMINO_RUN_ID ]] && DOMINO_RUN_ID="1"
-[[ -z $DOMINO_USER_HOST ]] && DOMINO_USER_HOST="http://localhost"
-[[ -z $DOMINO_USE_SUBDOMAIN ]] && DOMINO_USE_SUBDOMAIN=false
  
 # Prevent SAS Entrypoint script from starting Apache proxy server
 APACHE_CONF=/etc/httpd/conf/httpd.conf
