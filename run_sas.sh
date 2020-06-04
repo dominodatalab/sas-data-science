@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 set -o errexit -o pipefail
+
+[[ -z $DOMINO_USER_NAME ]] && DOMINO_USER_NAME="domino"
+[[ -z $DOMINO_WORKING_DIR ]] && DOMINO_WORKING_DIR="/mnt"
+[[ -z $DOMINO_PROJECT_OWNER ]] && DOMINO_PROJECT_OWNER="domino"
+[[ -z $DOMINO_PROJECT_NAME ]] && DOMINO_PROJECT_NAME="domino"
+[[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
  
 DOMINO_SAS_CONFIG_DIR="${DOMINO_WORKING_DIR}/sasconfig"
 DOMINO_SASBATCH_AUTOEXEC_FILE="${DOMINO_SAS_CONFIG_DIR}/sasbatch-autoexec.sas"
 SAS_BATCH_AUTOEXEC_FILE="/opt/sas/viya/config/etc/batchserver/default/autoexec.sas"
 SAS_AUTHINFO_FILE="$HOME/.authinfo"
- 
-[[ -z $SAS_LOGS_TO_DISK ]] && SAS_LOGS_TO_DISK=true
  
 function sas_log_errors { echo $(grep "ERROR: Errors printed on page" $1 | wc -l); }
  
