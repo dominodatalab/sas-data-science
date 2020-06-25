@@ -35,7 +35,7 @@ then
  
         # Make sure we minimize output to stdout
         cd $(dirname "$FILE")
-        /opt/sas/spre/home/bin/sas -batch $FILE
+        /opt/sas/spre/home/bin/sas -batch $(basename "$FILE")
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint --batch "$1"' root > /dev/null
  
