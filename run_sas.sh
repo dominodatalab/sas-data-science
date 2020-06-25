@@ -18,7 +18,7 @@ function sas_log_errors { echo $(grep "ERROR: Errors printed on page" $1 | wc -l
 FILE=$1
 if [[ $FILE == *.sas ]]
 then
-    if [[ -e "$FILE" ]]
+    if [[ -f "$FILE" ]]
     then
         # Set up Domino project to preserve SAS configuration files
         mkdir -p "$DOMINO_SAS_CONFIG_DIR"
@@ -34,7 +34,9 @@ then
         sudo sed -Ei 's#set [-+]x##g' /opt/sas/viya/home/SASFoundation/utilities/bin/cas_create_dir.sh
  
         # Make sure we minimize output to stdout
-        sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null
+        cd $(dirname "$FILE")
+        /opt/sas/spre/home/bin/sas -batch $FILE
+        #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint --batch "$1"' root > /dev/null
  
         # Output of SAS Program should be saved to a log file
