@@ -34,26 +34,28 @@ then
         sudo sed -Ei 's#set [-+]x##g' /opt/sas/viya/home/SASFoundation/utilities/bin/cas_create_dir.sh
  
         # Run the SAS Program
+	log_file = /tmp/sas_batch.log
         cd $(dirname "$FILE")
-        /opt/sas/spre/home/bin/sas -batch $(basename "$FILE")
+        /opt/sas/spre/home/bin/sas -batch $(basename "$FILE") -log $log_file || true
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK su --session-command '/opt/sas/viya/home/bin/entrypoint --batch "$1"' root > /dev/null
  
         # Output of SAS Program should be saved to a log file
         # Grab the filename of the most recent log file that fits the name of the SAS Program
-        log_file=$(ls -t $(basename $(echo ${FILE} | cut -d "." -f 1))*.log | head -n 1)
- 
-        # Write output of script to STDOUT
-        cat $log_file
+        #log_file=$(ls -t $(basename $(echo ${FILE} | cut -d "." -f 1))*.log | head -n 1)
  
         exit_code=0
-        if [[ $(sas_log_errors $log_file) -gt 0 ]]
-        then
+        if [[ -f $log_file ]]; then
+            # Write output of script to STDOUT
+            cat $log_file
+ 
+            if [[ $(sas_log_errors $log_file) -gt 0 ]]
+            then
+                exit_code=1
+            fi
+        else
             exit_code=1
         fi
- 
-        # Remove log file
-        rm -rf $log_file
  
         exit $exit_code
     else
