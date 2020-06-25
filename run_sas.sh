@@ -39,21 +39,21 @@ then
  
         # Output of SAS Program should be saved to a log file
         # Grab the filename of the most recent log file that fits the name of the SAS Program
-        log_file=$(ls -t $(basename $(echo ${FILE} | cut -d "." -f 1))*.log | head -n 1)
+        #log_file=$(ls -t $(basename $(echo ${FILE} | cut -d "." -f 1))*.log | head -n 1)
  
         # Write output of script to STDOUT
-        cat $log_file
+        #cat $log_file
  
-        exit_code=0
-        if [[ $(sas_log_errors $log_file) -gt 0 ]]
-        then
-            exit_code=1
-        fi
+        #exit_code=0
+        #if [[ $(sas_log_errors $log_file) -gt 0 ]]
+        #then
+        #    exit_code=1
+        #fi
  
         # Remove log file
-        rm -rf $log_file
+        #rm -rf $log_file
  
-        exit $exit_code
+        #exit $exit_code
     else
         echo "File '$FILE' does not exist. Please contact support@dominodatalab.com if this is unexpected."
     fi
