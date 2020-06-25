@@ -34,7 +34,7 @@ then
         sudo sed -Ei 's#set [-+]x##g' /opt/sas/viya/home/SASFoundation/utilities/bin/cas_create_dir.sh
  
         # Run the SAS Program
-	log_file = /tmp/sas_batch.log
+	log_file=/tmp/sas_batch.log
         cd $(dirname "$FILE")
         /opt/sas/spre/home/bin/sas -batch $(basename "$FILE") -log $log_file || true
         #sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK AUTHINFO="$SAS_AUTHINFO_FILE" /opt/sas/viya/home/bin/entrypoint --batch "$1" > /dev/null
