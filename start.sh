@@ -133,7 +133,7 @@ sudo sed -Ei "s#8888#$REVERSE_PROXY_PORT#g" ${SASDS_SCRIPT_DIR}/nginx.conf
 sudo sed -E "s#SESSION_PATH#$PREFIX#g" ${SASDS_SCRIPT_DIR}/start.html > ${SASDS_SCRIPT_DIR}/html${DOMINO_SAS_ENTRY_PAGE}
 
 # This actually starts the SAS Studio workspace
-sudo SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="$_JAVA_OPTIONS $SAS_JAVA_OPTIONS" su --session-command '/opt/sas/viya/home/bin/entrypoint &' root
+sudo -E SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="$_JAVA_OPTIONS $SAS_JAVA_OPTIONS" su -p --session-command '/opt/sas/viya/home/bin/entrypoint &' root
 
 # Wait for SAS Studio web server to come online
 until $(curl --output /dev/null --silent --head --fail $SAS_TEST_URL); do sleep 3; done
