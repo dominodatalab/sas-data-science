@@ -21,7 +21,7 @@ mkdir $WORKING_TMP_DIR
 cd $WORKING_TMP_DIR
  
 # Install Python3
-yum install python3 -y
+yum install python3 python3-devel -y
 alias python="/usr/bin/python3"
 rm -rf "/usr/bin/pip"
 ln -s `which pip3` "/usr/bin/pip"
