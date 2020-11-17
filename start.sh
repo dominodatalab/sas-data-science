@@ -2,6 +2,7 @@
 set -o errexit -o pipefail
 
 [[ -z $DOMINO_USER_NAME ]] && DOMINO_USER_NAME="domino"
+[[ -z $DOMINO_USER_PASSWORD ]] && DOMINO_USER_PASSWORD="domino"
 [[ -z $DOMINO_WORKING_DIR ]] && DOMINO_WORKING_DIR="/mnt"
 [[ -z $DOMINO_PROJECT_OWNER ]] && DOMINO_PROJECT_OWNER="domino"
 [[ -z $DOMINO_PROJECT_NAME ]] && DOMINO_PROJECT_NAME="domino"
@@ -103,8 +104,8 @@ echo $SAS_SHORTCUTS > $SAS_SHORTCUTS_FILE
  
 # Configure SAS Studio options for Domino
 SAS_CONFIG_UPDATES="""
-sas.studio.basicUser=domino
-sas.studio.basicPassword=domino
+sas.studio.basicUser=${DOMINO_USER_NAME}
+sas.studio.basicPassword=${DOMINO_USER_PASSWORD}
 sas.studio.fileNavigationRoot=CUSTOM
 sas.studio.fileNavigationCustomRootPath=${DOMINO_WORKING_DIR}
 sas.studio.globalShortcutsPath=${SAS_SHORTCUTS_FILE}
