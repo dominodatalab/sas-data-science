@@ -1,0 +1,9 @@
+sasds:
+    title: "SAS Data Science"
+    iconUrl: "https://upload.wikimedia.org/wikipedia/commons/1/10/SAS_logo_horiz.svg"
+    start: [ "/var/opt/workspaces/sasds/start" ]
+    httpProxy:
+        internalPath: "/{{ownerUsername}}/{{projectName}}/{{sessionPathComponent}}/{{runId}}/start.html"
+        port: 8888
+        rewrite: false
+        requireSubdomain: false
