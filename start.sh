@@ -31,7 +31,7 @@ SAS_TASKS_DIR="$HOME/.sasstudio5/myTasks"
 SAS_PREFERENCES_DIR="$HOME/.sasstudio5/preferences"
 SAS_KEYBOARDSHORTCUTS_DIR="$HOME/.sasstudio5/keyboardShortcuts"
 SAS_STATE_DIR="$HOME/.sasstudio5/state"
-SAS_JAVA_OPTIONS="-Dserver.servlet.session.timeout=-1"
+SAS_JAVA_OPTIONS="-Dserver.servlet.session.timeout=31104000s"
  
 # Prevent SAS Entrypoint script from starting Apache proxy server
 APACHE_CONF=/etc/httpd/conf/httpd.conf
