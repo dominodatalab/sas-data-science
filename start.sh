@@ -136,6 +136,10 @@ sudo sed -E "s#SESSION_PATH#$PREFIX#g" ${SASDS_SCRIPT_DIR}/start.html > ${SASDS_
 # Populate environment variables into SAS processes
 export | sudo sh -c "cat >> /opt/sas/spre/home/SASFoundation/bin/sasenv_local"
 
+# Enable XCMD
+sudo sed -Ei 's#^USERMODS=(.*)#USERMODS=-allowxcmd \1#g' /opt/sas/viya/config/etc/spawner/default/spawner_usermods.sh
+sudo sh -c "echo '-XCMD' >> /opt/sas/spre/home/SASFoundation/sasv9_local.cfg"
+
 # This actually starts the SAS Studio workspace
 sudo -E SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="$_JAVA_OPTIONS $SAS_JAVA_OPTIONS" bash -c '/opt/sas/viya/home/bin/entrypoint &'
 
