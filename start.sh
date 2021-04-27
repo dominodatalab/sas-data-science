@@ -141,7 +141,8 @@ sudo sed -Ei 's#^USERMODS=(.*)#USERMODS=-allowxcmd \1#g' /opt/sas/viya/config/et
 sudo sh -c "echo '-XCMD' >> /opt/sas/spre/home/SASFoundation/sasv9_local.cfg"
 
 # This actually starts the SAS Studio workspace
-sudo -E SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="$_JAVA_OPTIONS $SAS_JAVA_OPTIONS" bash -c '/opt/sas/viya/home/bin/entrypoint &'
+# The Apache httpd variables here are to ensure the SAS httpd service does not start since we do not use it in Domino
+sudo -E SAS_LOGS_TO_DISK=$SAS_LOGS_TO_DISK _JAVA_OPTIONS="$_JAVA_OPTIONS $SAS_JAVA_OPTIONS" APACHE_CONF_D=/etc/httpd/conf.d APACHE_CONF=/etc/httpd/conf/httpd.conf APACHE_DOCROOT=/var/www/html APACHE_BIN=/usr/bin/echo APACHE_CTL=/usr/bin/echo APACHE_PID=/var/run/sas/sas-viya-spawner-default.pid bash -c '/opt/sas/viya/home/bin/entrypoint &'
 
 # Wait for SAS Studio web server to come online
 until $(curl --output /dev/null --silent --head --fail $SAS_TEST_URL); do sleep 3; done
