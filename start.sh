@@ -152,4 +152,4 @@ sudo /usr/sbin/nginx -c ${SASDS_SCRIPT_DIR}/nginx.conf
 echo -e "\n\nSAS Studio is now running\nTo get started, please visit ${DOMINO_USER_HOST}${DOMINO_SAS_ENTRY_PAGE} in your web browser.\n\n"
 
 # Infinite loop to prevent Workspace container from terminating
-while true; do :; done;
+while true ; do :; sleep 60 ; done
